@@ -17,6 +17,46 @@ _LOCKS_GUARD = threading.Lock()
 _LOCKS: dict[str, threading.Lock] = {}
 
 
+def _save_reference_wav(path: str, waveform: torch.Tensor, sample_rate: int) -> None:
+    """Write a [C, T] float waveform to a 16-bit PCM WAV.
+
+    torchaudio.save() in some builds (e.g. 2.11 + cu130) routes to the
+    torchcodec backend, which is frequently not installed. Writing the WAV
+    directly with soundfile/scipy avoids that hard dependency entirely while
+    producing a standard PCM file that IndexTTS decoders read without issue.
+    """
+    import numpy as np
+
+    data = waveform.detach().cpu().to(torch.float32).clamp(-1.0, 1.0).numpy()
+    if data.ndim == 1:
+        data = data[np.newaxis, :]
+    pcm = np.clip(data, -1.0, 1.0)
+    pcm = (pcm * 32767.0).round().astype(np.int16)
+    # Both soundfile and scipy expect (samples, channels).
+    pcm = pcm.T
+
+    try:
+        import soundfile as sf
+
+        sf.write(path, pcm, sample_rate, subtype="PCM_16", format="WAV")
+        return
+    except Exception:
+        pass
+
+    try:
+        from scipy.io import wavfile
+
+        wavfile.write(path, sample_rate, pcm)
+        return
+    except Exception:
+        pass
+
+    raise RuntimeError(
+        "无法写入参考音频：环境中缺少 soundfile 与 scipy，且 torchaudio.save "
+        "需要未安装的 torchcodec。请安装 soundfile 或 scipy 后再试。"
+    )
+
+
 def _lock_for(key: str) -> threading.Lock:
     with _LOCKS_GUARD:
         return _LOCKS.setdefault(key, threading.Lock())
@@ -69,13 +109,9 @@ def comfy_audio_to_reference_wav(audio: dict[str, Any], *, kind: str) -> tuple[P
 
     with _lock_for(key):
         if not target.is_file():
-            try:
-                import torchaudio
-            except ImportError as exc:
-                raise RuntimeError("缺少 torchaudio，无法保存参考音频。") from exc
             temporary = target.with_name(f".{target.stem}-{os.getpid()}-{threading.get_ident()}.tmp.wav")
             try:
-                torchaudio.save(str(temporary), mono, INDEXTTS_SAMPLE_RATE)
+                _save_reference_wav(str(temporary), mono, INDEXTTS_SAMPLE_RATE)
                 os.replace(temporary, target)
             finally:
                 if temporary.exists():
