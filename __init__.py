@@ -1,5 +1,17 @@
 """ComfyUI IndexTTS 2.5 nodes by Bilibili creator T8star-Aix."""
 
+import os
+import sys
+
+# The IndexTTS 2.5 inference core is vendored at ./indextts and imported as a
+# top-level package (e.g. `from indextts.utils.common import ...`). ComfyUI does
+# not reliably expose the custom-node directory on sys.path in every loader, so
+# we register our own directory explicitly. This is what makes the bundled
+# `indextts` importable and clears the otherwise silent ImportFailed on load.
+_ROOT = os.path.dirname(os.path.abspath(__file__))
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+
 try:
     if __package__:
         from .nodes_v3 import comfy_entrypoint
