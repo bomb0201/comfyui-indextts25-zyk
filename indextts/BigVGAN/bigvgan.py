@@ -457,13 +457,16 @@ class BigVGAN(
         cls,
         *,
         model_id: str,
-        revision: str,
-        cache_dir: str,
-        force_download: bool,
-        proxies: Optional[Dict],
-        resume_download: bool,
-        local_files_only: bool,
-        token: Union[str, bool, None],
+        revision: Optional[str] = None,
+        cache_dir: Optional[str] = None,
+        force_download: bool = False,
+        # huggingface_hub>=1.0 的 ModelHubMixin.from_pretrained 不再传递
+        # proxies/resume_download（hf_hub_download 也已移除这两个参数）；
+        # 保留为可选参数以兼容旧版 hub 的调用契约。
+        proxies: Optional[Dict] = None,
+        resume_download: bool = False,
+        local_files_only: bool = False,
+        token: Union[str, bool, None] = None,
         map_location: str = "cpu",  # Additional argument
         strict: bool = False,  # Additional argument
         use_cuda_kernel: bool = False,
@@ -482,8 +485,6 @@ class BigVGAN(
                 revision=revision,
                 cache_dir=cache_dir,
                 force_download=force_download,
-                proxies=proxies,
-                resume_download=resume_download,
                 token=token,
                 local_files_only=local_files_only,
             )
@@ -514,8 +515,6 @@ class BigVGAN(
                 revision=revision,
                 cache_dir=cache_dir,
                 force_download=force_download,
-                proxies=proxies,
-                resume_download=resume_download,
                 token=token,
                 local_files_only=local_files_only,
             )
