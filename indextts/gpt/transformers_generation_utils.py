@@ -2414,16 +2414,20 @@ class GenerationMixin:
                 **model_kwargs,
             )
 
-        # Convert to legacy cache format if requested
+        # Convert to legacy cache format if requested.
+        # transformers 5.x removed `return_legacy_cache` and the legacy tuple cache
+        # format entirely -- 5.x `DynamicCache` no longer exposes `to_legacy_cache`,
+        # so this backward-compat block is inert on 5.x. Read the flag defensively
+        # (default False = v5 semantics: never return the legacy format).
         if (
-            generation_config.return_legacy_cache is not False  # Should check for `True` after v4.47
+            getattr(generation_config, "return_legacy_cache", False) is not False  # Should check for `True` after v4.47
             and not is_torchdynamo_compiling()
             and hasattr(result, "past_key_values")
             and hasattr(result.past_key_values, "to_legacy_cache")
             and result.past_key_values.to_legacy_cache is not None
         ):
             # handle BC (convert by default if he user hasn't passed a cache AND the cache is of the default type)
-            should_convert_cache = generation_config.return_legacy_cache
+            should_convert_cache = getattr(generation_config, "return_legacy_cache", False)
             is_user_defined_cache = user_defined_cache is not None
             is_default_cache_type = (
                 type(result.past_key_values) == DynamicCache  # noqa E721
