@@ -360,9 +360,30 @@ class IndexTTS2:
 
             aux_paths = ensure_models_available(self.model_dir)
             bigvgan_dir = aux_paths["bigvgan"]
-        self.bigvgan = bigvgan.BigVGAN.from_pretrained(
-            bigvgan_dir, use_cuda_kernel=self.use_cuda_kernel
+        # 本地直接加载，不经过 huggingface_hub 的 ModelHubMixin：
+        # vendored BigVGAN 的 from_pretrained 依赖 PyTorchModelHubMixin，其
+        # _from_pretrained 契约随 huggingface_hub 大版本变更而破坏过（见提交
+        # bbd3b1d 的签名修复）。权重本就位于本地目录，直接构造 + torch.load 与
+        # 原 _from_pretrained 的本地分支逐行等价（含 weight-norm 回退），并彻底
+        # 移除运行时对 hub API 契约的依赖。
+        bigvgan_h = bigvgan.load_hparams_from_json(
+            os.path.join(bigvgan_dir, "config.json")
         )
+        self.bigvgan = bigvgan.BigVGAN(
+            bigvgan_h, use_cuda_kernel=self.use_cuda_kernel
+        )
+        bigvgan_ckpt = torch.load(
+            os.path.join(bigvgan_dir, "bigvgan_generator.pt"), map_location="cpu"
+        )
+        try:
+            self.bigvgan.load_state_dict(bigvgan_ckpt["generator"])
+        except RuntimeError:
+            print(
+                "[INFO] the pretrained checkpoint does not contain weight norm. "
+                "Loading the checkpoint after removing weight norm!"
+            )
+            self.bigvgan.remove_weight_norm()
+            self.bigvgan.load_state_dict(bigvgan_ckpt["generator"])
         self.bigvgan = self.bigvgan.to(self.device)
         self.bigvgan.remove_weight_norm()
         self.bigvgan.eval()
