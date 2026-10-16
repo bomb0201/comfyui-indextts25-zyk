@@ -48,7 +48,10 @@ from transformers.modeling_outputs import (
 )
 # from transformers.modeling_utils import PreTrainedModel, SequenceSummary
 
-from transformers.pytorch_utils import Conv1D, find_pruneable_heads_and_indices, prune_conv1d_layer
+from transformers.pytorch_utils import Conv1D
+
+# transformers 5.x 删除了 pytorch_utils 中的剪枝助手；改从本地兼容层导入。
+from indextts.gpt._compat import find_pruneable_heads_and_indices, prune_conv1d_layer
 from transformers.utils import (
     ModelOutput,
     add_code_sample_docstrings,
@@ -60,7 +63,8 @@ from transformers.utils import (
     logging,
     replace_return_docstrings,
 )
-from transformers.utils.model_parallel_utils import assert_device_map, get_device_map
+# transformers 5.x 删除了 utils.model_parallel_utils 模块；改从本地兼容层导入。
+from indextts.gpt._compat import assert_device_map, get_device_map
 from transformers.models.gpt2.configuration_gpt2 import GPT2Config
 
 

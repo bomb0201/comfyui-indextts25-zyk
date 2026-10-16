@@ -21,7 +21,9 @@ import numpy as np
 import torch
 
 from transformers.utils import add_start_docstrings
-from transformers.generation.beam_constraints import Constraint, ConstraintListState
+# transformers 5.x 移除了 generation.beam_constraints 模块；改从本插件的
+# vendored 副本导入（见 transformers_beam_constraints.py）。
+from indextts.gpt.transformers_beam_constraints import Constraint, ConstraintListState
 
 
 PROCESS_INPUTS_DOCSTRING = r"""

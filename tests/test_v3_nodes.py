@@ -56,7 +56,7 @@ def test_registers_all_pure_v3_nodes():
         "T8_IndexTTS25_UpdateCheck",
         "T8_IndexTTS25_RuntimeBenchmark",
     ]
-    assert all(schema.category == "T8star-Aix/Audio/IndexTTS 2.5" for schema in schemas)
+    assert all(schema.category == "ZYK/Audio/IndexTTS 2.5" for schema in schemas)
     schemas_by_id = {schema.node_id: schema for schema in schemas}
     assert schemas_by_id["T8_IndexTTS25_Generate"].outputs[0].io_type == "AUDIO"
     assert schemas_by_id["T8_IndexTTS25_DialogueGenerate"].outputs[0].io_type == "AUDIO"

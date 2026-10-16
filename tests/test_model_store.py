@@ -422,7 +422,8 @@ def test_comfy_requirements_do_not_replace_torch_or_pull_training_stacks():
     )
     assert len(active) == 8
     assert not any(line.startswith(("matplotlib", "modelscope")) for line in active)
-    assert [line for line in active if "<" in line] == ["transformers>=4.52.1,<5"]
+    assert [line for line in active if "<" in line] == []
+    assert "transformers>=5.13.0" in active
 
     optional = (
         (model_store.PLUGIN_ROOT / "requirements-modelscope.txt")

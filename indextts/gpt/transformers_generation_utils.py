@@ -29,7 +29,6 @@ from transformers.cache_utils import (
     Cache,
     DynamicCache,
     EncoderDecoderCache,
-    OffloadedCache,
     StaticCache,
 )
 try:
@@ -43,8 +42,12 @@ from transformers.configuration_utils import PretrainedConfig
 from transformers.integrations.deepspeed import is_deepspeed_zero3_enabled
 from transformers.integrations.fsdp import is_fsdp_managed_module
 from transformers.modeling_outputs import CausalLMOutputWithPast, Seq2SeqLMOutput
-from transformers.pytorch_utils import isin_mps_friendly
-from transformers.tokenization_utils import ExtensionsTrie
+# transformers 5.x 删除了 tokenization_utils 模块（ExtensionsTrie 迁至
+# tokenization_python），并删除了 pytorch_utils.isin_mps_friendly；
+# 后者连同束搜索多样性处理器、cache offload 占位一并从本地兼容层导入。
+from transformers.tokenization_python import ExtensionsTrie
+
+from indextts.gpt._compat import HammingDiversityLogitsProcessor, OffloadedCache, isin_mps_friendly
 from transformers.utils import (
     ModelOutput,
     is_accelerate_available,
@@ -54,8 +57,10 @@ from transformers.utils import (
     is_torchdynamo_compiling,
     logging,
 )
-from transformers.generation.beam_constraints import DisjunctiveConstraint, PhrasalConstraint
-from transformers.generation.beam_search import BeamScorer, BeamSearchScorer, ConstrainedBeamSearchScorer
+# transformers 5.x 移除了 generation.beam_search / beam_constraints 模块；
+# 改从本插件的 vendored 副本导入（默认 num_beams=3，束搜索是活路径）。
+from indextts.gpt.transformers_beam_constraints import DisjunctiveConstraint, PhrasalConstraint
+from indextts.gpt.transformers_beam_search import BeamScorer, BeamSearchScorer, ConstrainedBeamSearchScorer
 from transformers.generation.candidate_generator import (
     AssistedCandidateGenerator,
     AssistedCandidateGeneratorDifferentTokenizers,
@@ -86,7 +91,6 @@ from transformers.generation.logits_process import (
     ExponentialDecayLengthPenalty,
     ForcedBOSTokenLogitsProcessor,
     ForcedEOSTokenLogitsProcessor,
-    HammingDiversityLogitsProcessor,
     InfNanRemoveLogitsProcessor,
     LogitNormalization,
     LogitsProcessorList,

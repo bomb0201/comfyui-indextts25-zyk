@@ -1,4 +1,8 @@
-"""ComfyUI IndexTTS 2.5 nodes by Bilibili creator T8star-Aix."""
+"""ComfyUI IndexTTS 2.5 nodes — comfyui-indextts25-zyk fork.
+
+Based on T8star-Aix's comfyui-indextts25-t8; vendored inference core ported to
+transformers 5.x (see indextts/gpt/_compat.py).
+"""
 
 import sys
 from pathlib import Path
@@ -26,7 +30,7 @@ try:
         import types
 
         _root = _PLUGIN_ROOT
-        _package_name = "_comfyui_indextts25_t8_bootstrap"
+        _package_name = "_comfyui_indextts25_zyk_bootstrap"
         _package = sys.modules.get(_package_name)
         if _package is None:
             _package = types.ModuleType(_package_name)

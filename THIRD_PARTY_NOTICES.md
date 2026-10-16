@@ -33,7 +33,8 @@ IndexTTS 模型使用许可证同时适用；第三方代码的权利仍归各�
 
 ## 衍生品声明
 
-`comfyui-indextts25-T8` 是第三方 ComfyUI 集成，并非 IndexTTS 原始权利人或哔哩哔哩官方产品。
+`comfyui-indextts25-zyk` 是第三方 ComfyUI 集成（fork 自 T8star-Aix 的 comfyui-indextts25-t8），
+并非 IndexTTS 原始权利人或哔哩哔哩官方产品。
 
 该衍生品对原模型所作的任何改动与原模型原始权利人无关，原始权利人对该衍生品不背书、
-不担保、不承担责任。`T8star-Aix` 标识仅用于说明本节点集成的作者/发布者，不表示上游官方背书。
+不担保、不承担责任。`ZYK` 标识仅用于说明本节点集成的作者/发布者，不表示上游官方背书。

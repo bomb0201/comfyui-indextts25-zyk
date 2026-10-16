@@ -1,10 +1,11 @@
-# comfyui-indextts25-T8
+# comfyui-indextts25-zyk
 
 **简体中文** | [English](README_EN.md)
 
-IndexTTS 2.5 的 ComfyUI V3 原生节点集成。节点菜单位于：
+IndexTTS 2.5 的 ComfyUI V3 原生节点集成（fork 自 T8star-Aix 的 comfyui-indextts25-t8，
+vendored 推理核心已移植至 transformers 5.x）。节点菜单位于：
 
-`T8star-Aix / Audio / IndexTTS 2.5`
+`ZYK / Audio / IndexTTS 2.5`
 
 作者标识：**B 站：T8star-Aix**。
 

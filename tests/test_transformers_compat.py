@@ -9,9 +9,9 @@ from indextts.gpt.model_v2 import GPT2InferenceModel
 from indextts.gpt.transformers_generation_utils import GenerationMixin
 
 
-def test_supported_transformers_v4_generation_api():
+def test_supported_transformers_v5_generation_api():
     version = Version(transformers_version)
-    assert Version("4.52.1") <= version < Version("5")
+    assert version >= Version("5.13.0")
     assert GenerationMixin in GPT2InferenceModel.__bases__
 
     model = GenerationMixin()

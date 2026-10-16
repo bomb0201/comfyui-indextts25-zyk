@@ -111,7 +111,7 @@ from .services.downloader import ensure_model_bundle
 
 
 LOGGER = logging.getLogger("comfyui-indextts25-T8")
-CATEGORY = "T8star-Aix/Audio/IndexTTS 2.5"
+CATEGORY = "ZYK/Audio/IndexTTS 2.5"
 ModelType = io.Custom("T8_INDEXTTS25_MODEL")
 EmotionType = io.Custom("T8_INDEXTTS25_EMOTION")
 SamplingType = io.Custom("T8_INDEXTTS25_SAMPLING")
@@ -274,7 +274,7 @@ class T8IndexTTS25ModelLoader(io.ComfyNode):
         options = model_options()
         return io.Schema(
             node_id="T8_IndexTTS25_ModelLoader",
-            display_name="IndexTTS 2.5 模型加载器 · T8star-Aix",
+            display_name="IndexTTS 2.5 模型加载器",
             category=CATEGORY,
             search_aliases=["IndexTTS 2.5", "T8star-Aix", "TTS model loader"],
             description=(
@@ -637,7 +637,7 @@ class T8IndexTTS25EmotionControl(io.ComfyNode):
         )
         return io.Schema(
             node_id="T8_IndexTTS25_EmotionControl",
-            display_name="IndexTTS 2.5 情感控制 · T8star-Aix",
+            display_name="IndexTTS 2.5 情感控制",
             category=CATEGORY,
             search_aliases=["IndexTTS emotion", "情感向量", "情感参考音频"],
             description="在跟随音色、情感参考音频、八维向量和文本描述四种官方控制方式之间切换。",
@@ -742,7 +742,7 @@ class T8IndexTTS25SamplingConfig(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_SamplingConfig",
-            display_name="IndexTTS 2.5 采样设置 · T8star-Aix",
+            display_name="IndexTTS 2.5 采样设置",
             category=CATEGORY,
             search_aliases=["IndexTTS sampling", "TTS sampling config"],
             description=(
@@ -982,7 +982,7 @@ class T8IndexTTS25TextPreview(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_TextPreview",
-            display_name="IndexTTS 2.5 分段与停顿预览 · T8star-Aix",
+            display_name="IndexTTS 2.5 分段与停顿预览",
             category=CATEGORY,
             search_aliases=[
                 "text segment preview",
@@ -1047,7 +1047,7 @@ class T8IndexTTS25Pronunciation(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_Pronunciation",
-            display_name="IndexTTS 2.5 发音控制 · T8star-Aix",
+            display_name="IndexTTS 2.5 发音控制",
             category=CATEGORY,
             search_aliases=[
                 "IndexTTS pronunciation",
@@ -1137,7 +1137,7 @@ class T8IndexTTS25SavedVoice(io.ComfyNode):
         library_root = default_voice_library_root()
         return io.Schema(
             node_id="T8_IndexTTS25_SavedVoice",
-            display_name="IndexTTS 2.5 已保存音色 · T8star-Aix",
+            display_name="IndexTTS 2.5 已保存音色",
             category=CATEGORY,
             search_aliases=["已保存音色", "音色库", "saved voice", "voice bundle"],
             description=(
@@ -1226,7 +1226,7 @@ class T8IndexTTS25VoiceProfile(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_VoiceProfile",
-            display_name="IndexTTS 2.5 角色音色 · T8star-Aix",
+            display_name="IndexTTS 2.5 角色音色",
             category=CATEGORY,
             search_aliases=["角色音色", "voice profile", "character voice"],
             description="把角色名称、参考音频、默认语言和可选情感保存为可连线的工作流内音色。",
@@ -1365,7 +1365,7 @@ class T8IndexTTS25RoleLibrary(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_RoleLibrary",
-            display_name="IndexTTS 2.5 角色音色 / 情感合并 · T8star-Aix",
+            display_name="IndexTTS 2.5 角色音色 / 情感合并",
             category=CATEGORY,
             search_aliases=[
                 "多角色",
@@ -1404,7 +1404,7 @@ class T8IndexTTS25MergeVoiceEmotions(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_MergeVoiceEmotions",
-            display_name="IndexTTS 2.5 Merge Voice Emotions · T8star-Aix",
+            display_name="IndexTTS 2.5 Merge Voice Emotions",
             category=CATEGORY,
             search_aliases=["合并角色情感", "角色 emotion 汇总", "多角色情感"],
             description=(
@@ -1439,7 +1439,7 @@ class T8IndexTTS25DialogueScript(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_DialogueScript",
-            display_name="IndexTTS 2.5 批量台词 / SRT · T8star-Aix",
+            display_name="IndexTTS 2.5 批量台词 / SRT",
             category=CATEGORY,
             search_aliases=["SRT", "字幕配音", "批量台词", "dialogue script"],
             description=(
@@ -1527,7 +1527,7 @@ class T8IndexTTS25DialogueEmotionSuggest(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_DialogueEmotionSuggest",
-            display_name="IndexTTS 2.5 上下文逐句情感建议 · T8star-Aix",
+            display_name="IndexTTS 2.5 上下文逐句情感建议",
             category=CATEGORY,
             search_aliases=[
                 "context emotion",
@@ -1651,7 +1651,7 @@ class T8IndexTTS25TimelineEditor(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_TimelineEditor",
-            display_name="IndexTTS 2.5 可视化时间轴编辑 · T8star-Aix",
+            display_name="IndexTTS 2.5 可视化时间轴编辑",
             category=CATEGORY,
             search_aliases=["timeline", "时间轴", "字幕编辑", "SRT editor"],
             description=(
@@ -1719,7 +1719,7 @@ class T8IndexTTS25DialogueGenerate(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_DialogueGenerate",
-            display_name="IndexTTS 2.5 多角色 / SRT 生成 · T8star-Aix",
+            display_name="IndexTTS 2.5 多角色 / SRT 生成",
             category=CATEGORY,
             essentials_category="Audio",
             search_aliases=["SRT generate", "多角色配音", "batch dialogue"],
@@ -2252,7 +2252,7 @@ class T8IndexTTS25ASRProofread(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_ASRProofread",
-            display_name="IndexTTS 2.5 ASR 自动校对 · T8star-Aix",
+            display_name="IndexTTS 2.5 ASR 自动校对",
             category=CATEGORY,
             essentials_category="Audio",
             search_aliases=["Whisper", "ASR", "语音校对", "CER"],
@@ -2365,7 +2365,7 @@ class T8IndexTTS25SubtitleRewrite(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_SubtitleRewrite",
-            display_name="IndexTTS 2.5 字幕自动回写 · T8star-Aix",
+            display_name="IndexTTS 2.5 字幕自动回写",
             category=CATEGORY,
             search_aliases=["SRT rewrite", "字幕回写", "ASR subtitle"],
             description="根据多角色生成报告中的实际时间和 ASR 结果生成可保存的 SRT 文本。",
@@ -2432,7 +2432,7 @@ class T8IndexTTS25ReferenceQuality(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_ReferenceQuality",
-            display_name="IndexTTS 2.5 参考音频质量检测 · T8star-Aix",
+            display_name="IndexTTS 2.5 参考音频质量检测",
             category=CATEGORY,
             essentials_category="Audio",
             search_aliases=[
@@ -2519,7 +2519,7 @@ class T8IndexTTS25MemoryControl(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_MemoryControl",
-            display_name="IndexTTS 2.5 模型、显存与参考缓存管理 · T8star-Aix",
+            display_name="IndexTTS 2.5 模型、显存与参考缓存管理",
             category=CATEGORY,
             search_aliases=[
                 "释放显存",
@@ -2620,7 +2620,7 @@ class T8IndexTTS25AudioCppGenerate(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_AudioCppGenerate",
-            display_name="IndexTTS 2.5 audio.cpp 实验生成 · T8star-Aix",
+            display_name="IndexTTS 2.5 audio.cpp 实验生成",
             category=CATEGORY,
             essentials_category="Audio",
             search_aliases=["audio.cpp", "GGUF", "IndexTTS quantized", "实验后端"],
@@ -2767,7 +2767,7 @@ class T8IndexTTS25Environment(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_Environment",
-            display_name="IndexTTS 2.5 环境与可选加速 · T8star-Aix",
+            display_name="IndexTTS 2.5 环境与可选加速",
             category=CATEGORY,
             search_aliases=[
                 "加速诊断",
@@ -2827,7 +2827,7 @@ class T8IndexTTS25UpdateCheck(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_UpdateCheck",
-            display_name="IndexTTS 2.5 检查更新 · T8star-Aix",
+            display_name="IndexTTS 2.5 检查更新",
             category=CATEGORY,
             search_aliases=["update", "上游动态", "version check"],
             description="手动联网比较官方代码、官方模型和本节点版本；只报告，不下载、不覆盖。",
@@ -2870,7 +2870,7 @@ class T8IndexTTS25RuntimeBenchmark(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_RuntimeBenchmark",
-            display_name="IndexTTS 2.5 真实性能基准 · T8star-Aix",
+            display_name="IndexTTS 2.5 真实性能基准",
             category=CATEGORY,
             search_aliases=["benchmark", "RTF", "加速实测", "显存"],
             description="实测当前模型加载器所选模式的 RTF 与峰值显存；切换加速模式后重复运行即可对比。",
@@ -3005,7 +3005,7 @@ class T8IndexTTS25Generate(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_Generate",
-            display_name="IndexTTS 2.5 语音生成 · T8star-Aix",
+            display_name="IndexTTS 2.5 语音生成",
             category=CATEGORY,
             essentials_category="Audio",
             search_aliases=["IndexTTS TTS", "voice clone", "语音克隆", "T8star-Aix"],
@@ -3412,7 +3412,7 @@ class T8IndexTTS25AudioPostProcess(io.ComfyNode):
     def define_schema(cls) -> io.Schema:
         return io.Schema(
             node_id="T8_IndexTTS25_AudioPostProcess",
-            display_name="IndexTTS 2.5 人声后处理 · T8star-Aix",
+            display_name="IndexTTS 2.5 人声后处理",
             category=CATEGORY,
             essentials_category="Audio",
             search_aliases=["voice clarity", "人声清晰", "温暖", "去刺耳", "normalize"],
