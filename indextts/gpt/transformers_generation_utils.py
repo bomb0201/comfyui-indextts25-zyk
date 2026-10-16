@@ -47,7 +47,12 @@ from transformers.modeling_outputs import CausalLMOutputWithPast, Seq2SeqLMOutpu
 # 后者连同束搜索多样性处理器、cache offload 占位一并从本地兼容层导入。
 from transformers.tokenization_python import ExtensionsTrie
 
-from indextts.gpt._compat import HammingDiversityLogitsProcessor, OffloadedCache, isin_mps_friendly
+from indextts.gpt._compat import (
+    HammingDiversityLogitsProcessor,
+    OffloadedCache,
+    get_non_default_generation_parameters,
+    isin_mps_friendly,
+)
 from transformers.utils import (
     ModelOutput,
     is_accelerate_available,
@@ -1532,7 +1537,7 @@ class GenerationMixin:
                 not is_torchdynamo_compiling()
                 and self.generation_config._from_model_config  # 1)
                 and self.generation_config._original_object_hash == hash(self.generation_config)  # 2)
-                and len(self.config._get_non_default_generation_parameters()) > 0  # 3)
+                and len(get_non_default_generation_parameters(self.config)) > 0  # 3)
             ):
                 new_generation_config = GenerationConfig.from_model_config(self.config)
                 if new_generation_config != self.generation_config:  # 4)

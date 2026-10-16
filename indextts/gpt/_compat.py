@@ -367,6 +367,88 @@ class HammingDiversityLogitsProcessor(LogitsProcessor):
         return scores_processed
 
 # ---------------------------------------------------------------------------
+# ``PretrainedConfig`` 生成相关方法（transformers<=4.52，5.x 删除）。
+# vendored GenerationMixin._prepare_generation_config 的 legacy 分支会调用它们，
+# 用于检测"模型 config 里存在非默认生成参数"——5.x 已彻底移除该机制，
+# 这里原样内联以保持 4.52 语义完全一致。
+# ---------------------------------------------------------------------------
+
+def _get_global_generation_defaults() -> dict:
+    """原 transformers<=4.52 ``PretrainedConfig._get_global_generation_defaults``。"""
+    return {
+        "max_length": 20,
+        "min_length": 0,
+        "do_sample": False,
+        "early_stopping": False,
+        "num_beams": 1,
+        "num_beam_groups": 1,
+        "diversity_penalty": 0.0,
+        "temperature": 1.0,
+        "top_k": 50,
+        "top_p": 1.0,
+        "typical_p": 1.0,
+        "repetition_penalty": 1.0,
+        "length_penalty": 1.0,
+        "no_repeat_ngram_size": 0,
+        "encoder_no_repeat_ngram_size": 0,
+        "bad_words_ids": None,
+        "num_return_sequences": 1,
+        "output_scores": False,
+        "return_dict_in_generate": False,
+        "forced_bos_token_id": None,
+        "forced_eos_token_id": None,
+        "remove_invalid_values": False,
+        "exponential_decay_length_penalty": None,
+        "suppress_tokens": None,
+        "begin_suppress_tokens": None,
+    }
+
+
+def get_non_default_generation_parameters(config) -> dict:
+    """原 transformers<=4.52 ``PretrainedConfig._get_non_default_generation_parameters``
+    （5.x 删除）。逻辑逐行对应原实现，仅把 ``self`` 改为显式传入的 ``config``。"""
+    non_default_generation_parameters = {}
+    decoder_attribute_name = None
+
+    # Composite models don't have a default config, use their decoder config as a fallback for default values
+    # If no known pattern is matched, then `default_config = None` -> check against the global generation defaults
+    try:
+        default_config = config.__class__()
+    except ValueError:
+        decoder_config = config.get_text_config(decoder=True)
+        if decoder_config is not config:
+            default_config = decoder_config.__class__()
+        else:
+            default_config = None
+
+    # If it is a composite model, we want to check the subconfig that will be used for generation
+    self_decoder_config = config if decoder_attribute_name is None else getattr(config, decoder_attribute_name)
+
+    for parameter_name, default_global_value in _get_global_generation_defaults().items():
+        if hasattr(self_decoder_config, parameter_name):
+            is_default_in_config = is_default_generation_value = None
+            parameter_value = getattr(self_decoder_config, parameter_name)
+            # Three cases in which is okay for the model config to hold generation config parameters:
+            # 1. The parameter is set to `None`, effectively delegating its value to the generation config
+            if parameter_value is None:
+                continue
+            # 2. If we have a default config, then the instance should hold the same generation defaults
+            if default_config is not None:
+                is_default_in_config = parameter_value == getattr(default_config, parameter_name)
+            # 3. if we don't have a default config, then the instance should hold the global generation defaults
+            else:
+                is_default_generation_value = parameter_value == default_global_value
+
+            is_non_default = (is_default_in_config is False) or (
+                is_default_in_config is None and is_default_generation_value is False
+            )
+            if is_non_default:
+                non_default_generation_parameters[parameter_name] = getattr(self_decoder_config, parameter_name)
+
+    return non_default_generation_parameters
+
+
+# ---------------------------------------------------------------------------
 # transformers<=4.52 ``utils`` 中被 5.x 删除的常量与工具函数的本地等价实现。
 # 这些符号只出现在 vendored ``PreTrainedModel.from_pretrained`` 的权重解析
 # 路径中；IndexTTS 权重从本地目录加载，相关分支实际不会走到，但名字必须可解析。
